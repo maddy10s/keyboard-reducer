@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <title>App</title>
+    <style type="text/css">
+        #letterGrid tr td {
+            padding: 20px;
+            text-align: center;
+        }
+        table {
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 16px;
+            margin-left: 25%;
+            margin-top: 100px;
+        }
+        #letterGrid {
+            
+            font-size: 12px;
+            border: 1px solid black;
+            -webkit-box-shadow: 5px 5px 5px 5px rgba(0,0,0,0.43); 
+            box-shadow: 5px 5px 5px 5px rgba(0,0,0,0.43);
+        }
+        #letterGrid tr td:hover {
+            cursor: pointer;
+            border: 1px solid gray;
+            box-shadow: 1px;
+        }
+
+        .letter {
+            color: blue;
+            font-weight: bold;
+        }
+
+        .num {
+            color: red;
+        }
+        #sum{
+            font-size: 50px;
+            color:indigo;
+            margin-left: 50%;
+        }
+    </style>
+    <script type="text/javascript">
+        var alphaArr = [{ "letter": "A", "num": 1 }, { "letter": "B", "num": 2 }, { "letter": "C", "num": 3 },
+        { "letter": "D", "num": 4 }, { "letter": "E", "num": 5 }, { "letter": "F", "num": 6 },
+        { "letter": "G", "num": 7 }, { "letter": "H", "num": 8 }, { "letter": "I", "num": 9 },
+        { "letter": "J", "num": 1 }, { "letter": "K", "num": 2 }, { "letter": "L", "num": 3 },
+        { "letter": "M", "num": 4 }, { "letter": "N", "num": 5 }, { "letter": "O", "num": 6 },
+        { "letter": "P", "num": 7 }, { "letter": "Q", "num": 8 }, { "letter": "R", "num": 9 },
+        { "letter": "S", "num": 1 }, { "letter": "T", "num": 2 }, { "letter": "U", "num": 3 },
+        { "letter": "V", "num": 4 }, { "letter": "W", "num": 5 }, { "letter": "X", "num": 6 },
+        { "letter": "Y", "num": 7 }, { "letter": "Z", "num": 8 }];
+
+        function createTable() {
+
+            var table = document.getElementById("letterGrid");
+            var rowNum = 0;
+            var colNum = 0;
+            for (var i = 0; i < alphaArr.length; i++) {
+                if (alphaArr[i].num == 1) {
+                    //creates new row
+                    var row = table.insertRow(rowNum);
+                    rowNum++;
+                    colNum = 0;
+                }
+                var cell = row.insertCell(colNum);
+                var colCount = 0;
+                cell.addEventListener('click', function (event) {
+                    if (colCount < 30) {
+                        var content = event.currentTarget.innerHTML;
+                        var row = document.getElementById("displayRow");
+                        var c = row.insertCell(colCount);
+                        colCount++;
+                        c.innerHTML = content;
+                        calculateSum(event.currentTarget.firstChild.innerText, +event.currentTarget.lastChild.innerText);
+                    }
+                });
+                cell.innerHTML = "<div class='letter'>" + alphaArr[i].letter + "</div>" + "<div  class='num'>" + alphaArr[i].num + "</div>";
+                colNum++;
+            }
+        }
+        var sum = 0;
+        var nameAr = [];//useful for further modifications
+        function calculateSum(letter, num) {
+            var obj = { "letter": letter, "num": num };
+            nameAr.push(obj);
+            sum = sum + num;
+            while (sum > 9) {
+                var a = Math.trunc(sum % 10);
+                var b = Math.trunc(sum / 10);
+                sum = a + b;
+            }
+            document.getElementById("sum").innerText = sum;
+        }
+
+
+    </script>
+</head>
+
+<body onload="createTable()">
+    <table id="letterGrid"></table>
+
+    <table>
+        <tr id="displayRow"></tr>
+    </table>
+
+
+    <div id="sum"></div>
+</body>
+
+</html>
