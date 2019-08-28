@@ -9,19 +9,22 @@
             padding: 20px;
             text-align: center;
         }
+
         table {
             font-family: Arial, Helvetica, sans-serif;
             font-size: 16px;
             margin-left: 25%;
             margin-top: 100px;
         }
+
         #letterGrid {
-            
+
             font-size: 12px;
             border: 1px solid black;
-            -webkit-box-shadow: 5px 5px 5px 5px rgba(0,0,0,0.43); 
-            box-shadow: 5px 5px 5px 5px rgba(0,0,0,0.43);
+            -webkit-box-shadow: 5px 5px 5px 5px rgba(0, 0, 0, 0.43);
+            box-shadow: 5px 5px 5px 5px rgba(0, 0, 0, 0.43);
         }
+
         #letterGrid tr td:hover {
             cursor: pointer;
             border: 1px solid gray;
@@ -36,10 +39,20 @@
         .num {
             color: red;
         }
-        #sum{
+
+        #sum {
             font-size: 50px;
-            color:indigo;
+            color: indigo;
             margin-left: 50%;
+        }
+
+        .clear {
+            background-color: #e92727;
+            color: #ffffff;
+            outline: none;
+            padding: 5px;
+            border: 1px solid red;
+            margin-left: 5px;
         }
     </style>
     <script type="text/javascript">
@@ -51,13 +64,13 @@
         { "letter": "P", "num": 7 }, { "letter": "Q", "num": 8 }, { "letter": "R", "num": 9 },
         { "letter": "S", "num": 1 }, { "letter": "T", "num": 2 }, { "letter": "U", "num": 3 },
         { "letter": "V", "num": 4 }, { "letter": "W", "num": 5 }, { "letter": "X", "num": 6 },
-        { "letter": "Y", "num": 7 }, { "letter": "Z", "num": 8 }];
-
+        { "letter": "Y", "num": 7 }, { "letter": "Z", "num": 8 }, { "letter": "_", "num": 0 }];
+        var colCount = 0;
         function createTable() {
 
             var table = document.getElementById("letterGrid");
             var rowNum = 0;
-            var colNum = 0;
+            var colNum = 0;            
             for (var i = 0; i < alphaArr.length; i++) {
                 if (alphaArr[i].num == 1) {
                     //creates new row
@@ -66,18 +79,27 @@
                     colNum = 0;
                 }
                 var cell = row.insertCell(colNum);
-                var colCount = 0;
+                
                 cell.addEventListener('click', function (event) {
                     if (colCount < 30) {
                         var content = event.currentTarget.innerHTML;
                         var row = document.getElementById("displayRow");
                         var c = row.insertCell(colCount);
                         colCount++;
-                        c.innerHTML = content;
-                        calculateSum(event.currentTarget.firstChild.innerText, +event.currentTarget.lastChild.innerText);
+                        if (event.currentTarget.firstChild.innerText == "Space") {
+                            c.innerHTML = " ";
+                        } else {
+                            c.innerHTML = content;
+                            calculateSum(event.currentTarget.firstChild.innerText, +event.currentTarget.lastChild.innerText);
+                        }
                     }
                 });
-                cell.innerHTML = "<div class='letter'>" + alphaArr[i].letter + "</div>" + "<div  class='num'>" + alphaArr[i].num + "</div>";
+                if (alphaArr[i].letter == '_') {
+                    cell.innerHTML = "<div class='num'>Space</div>"
+                } else {
+                    cell.innerHTML = "<div class='letter'>" + alphaArr[i].letter + "</div>" + "<div  class='num'>" + alphaArr[i].num + "</div>";
+                }
+
                 colNum++;
             }
         }
@@ -95,6 +117,18 @@
             document.getElementById("sum").innerText = sum;
         }
 
+        function clearName() {
+            sum = 0;
+            colCount = 0;
+            document.getElementById("sum").innerText = "";
+            var row = document.getElementById("displayRow");
+            var cells = row.cells.length - 2;
+            console.log(cells);
+            for (var i = cells; i >= 0; i--) {                
+                row.deleteCell(i);
+            }
+            console.log(row);
+        }
 
     </script>
 </head>
@@ -103,7 +137,10 @@
     <table id="letterGrid"></table>
 
     <table>
-        <tr id="displayRow"></tr>
+        <tr id="displayRow">
+
+            <td><button class="clear" onclick="clearName()">Clear</button></td>
+        </tr>
     </table>
 
 
